@@ -67,13 +67,13 @@ app.use(function (req, res, next) {
 
 //正常请求的日志
 app.use(expressWinston.logger({
-  transports:[
+  transports: [
     new (winston.transports.Console)({
-      json:true,
-      colorize:true
+      json: true,
+      colorize: true
     }),
     new winston.transports.File({
-      filename:'logs/success.log'
+      filename: 'logs/success.log'
     })
   ]
 }));
@@ -82,13 +82,13 @@ app.use(expressWinston.logger({
 routes(app);
 //错误请求日志
 app.use(expressWinston.errorLogger({
-  transports:[
+  transports: [
     new winston.transports.Console({
-      json:true,
-      colorize:true
+      json: true,
+      colorize: true
     }),
     new winston.transports.File({
-      filename:'logs/error.log'
+      filename: 'logs/error.log'
     })
   ]
 }));
@@ -98,10 +98,16 @@ app.use(function (err, req, res, next) {
     error: err
   })
 })
-//监听端口，启动程序
-app.listen(config.port, function () {
-  console.log(`${pkg.name} listening on port ${config.port}`);
-})
+
+if (module.parent) {
+  module.exports = app;
+} else {
+  //监听端口，启动程序
+  app.listen(config.port, function () {
+    console.log(`${pkg.name} listening on port ${config.port}`);
+  })
+
+}
 
 
 
